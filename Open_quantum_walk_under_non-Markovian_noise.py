@@ -1,5 +1,5 @@
 # QUANTUM_WALK_UNDER_MARKOVIAN_NOISE: Quantum walk evolution subjected to non-markovian noise 
-#        
+#                                   : Krauss operators with minor modifications ref: Phys.Rev.A.70,010304(2004)
 #
 # Main variables: freq        - switching rate of the noise.
 #               : amp         - Amplitude of the noise.
@@ -8,7 +8,7 @@
 #               : coin_angle  - parameter of the SU(2) coin.
 #               : qubit_state - input coin state
 #               : z (1/2)     - plot with zeros/plot without zeros 
-############################################################################################
+##########################################################################################################################
 
 from qutip import *
 import numpy as np

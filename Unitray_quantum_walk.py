@@ -13,7 +13,6 @@ from qutip import *
 import numpy as np
 import matplotlib.pyplot as plt
 from math import *
-import seaborn as sns
 
 
 #Basis states

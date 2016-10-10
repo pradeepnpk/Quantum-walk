@@ -1,8 +1,8 @@
-# QUANTUM_WALK_UNDER_MARKOVIAN_NOISE: Quantum walk evolution subjected to markovian noise 
-#                                   : is implemented using 4 different noise channels.
+# QUANTUM_WALK_UNDER_MARKOVIAN_NOISE: Quantum walk evolution subjected to non-markovian noise 
+#        
 #
-# Main variables: p_c         - error probablity for the given channel
-#                 kai         - noise parameter
+# Main variables: freq        - switching rate of the noise
+#               : amp         - Amplitude of the noise
 #               : t           - number of steps of quantum walk.                               
 #               : sites       - number of lattice positions available to the walker (2*t+1).   
 #               : coin_angle  - parameter of the SU(2) coin.
@@ -14,12 +14,7 @@ from qutip import *
 import numpy as np
 import matplotlib.pyplot as plt
 from math import *
-import seaborn as sns
-
-from qutip import *
-import numpy as np
-import matplotlib.pyplot as plt
-from math import *
+import cmath as cm # Only the sqrt function from cmath module can handle img numbers. 
 
 #Basis states
 ket0 = basis(2,0).unit( )                # |0>
@@ -51,7 +46,7 @@ def walk(t,coin_angle):
 
 #Kraus operators for the non-Markovian master equation under RTN
 def telegraph_noise(t,sites,qstate,freq,amp):
-    nu = t*freq; mu = sqrt((2.0*amp*(1/freq))**2-1.0)      # Noise parameters
+    nu = t*freq; mu = cm.sqrt((2.0*amp*(1/freq))**2-1.0)      # Noise parameters
     gamma = exp(-nu)*(np.cos(nu*mu)+np.sin(nu*mu)/mu)      # Memory kernal
     K1 = tensor(sqrt((1+gamma)/2.0)*qeye(2), qeye(sites))  # Krauss operators
     K2 = tensor(sqrt((1-gamma)/2.0)*sigmaz(),qeye(sites))

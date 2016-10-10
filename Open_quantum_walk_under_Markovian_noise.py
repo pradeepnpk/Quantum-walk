@@ -60,7 +60,7 @@ def depolarizing(t,qstate,p_c):
     return dstate
 
 #Amplitude damping
-def ampdampling(t,qstate,p_c):
+def ampdamping(t,qstate,p_c):
     sites=2*t+1
     K1 = qutip.Qobj([[1,        0],  
                  [0,sqrt(1-p_c)]])

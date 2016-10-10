@@ -126,7 +126,6 @@ def plot_pdf(P_p):
 
 # Main instance of the program
 if __name__ == "__main__":  # this line is not necessary (good practice to use though, will be convinient when writing classes))
-    Psi_t = qwalk_gen_markov(100,psip,45,0.01)
-    P_p  = measurement(100,Psi_t,2)
-    
+    Psi_t = qwalk_gen_markov(100,psip,45,0.01) # call the qwalk generator
+    P_p  = measurement(100,Psi_t,2)            # measure the wave function returned by qwalk generator. # here z=2 in the measurement func implies the measurements are made only at even positions 
     plot_pdf(P_p)

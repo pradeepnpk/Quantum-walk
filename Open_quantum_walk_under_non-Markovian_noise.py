@@ -1,8 +1,8 @@
 # QUANTUM_WALK_UNDER_MARKOVIAN_NOISE: Quantum walk evolution subjected to non-markovian noise 
 #        
 #
-# Main variables: freq        - switching rate of the noise
-#               : amp         - Amplitude of the noise
+# Main variables: freq        - switching rate of the noise.
+#               : amp         - Amplitude of the noise.
 #               : t           - number of steps of quantum walk.                               
 #               : sites       - number of lattice positions available to the walker (2*t+1).   
 #               : coin_angle  - parameter of the SU(2) coin.

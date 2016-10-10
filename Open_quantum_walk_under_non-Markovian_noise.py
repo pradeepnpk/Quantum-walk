@@ -49,13 +49,6 @@ def walk(t,coin_angle):
   W_hat = S_hat*(tensor(C_hat,qeye(sites))) #combine both coin and shift
   return W_hat
 
-#Walk operator: Evolution operator for DTQW
-def walk(sites,coin_angle):
-    C_hat = coin(coin_angle) 
-    S_hat = shift(sites)     
-    W_hat = S_hat*(tensor(C_hat,qeye(sites))) 
-    return W_hat
-
 #Kraus operators for the non-Markovian master equation under RTN
 def telegraph_noise(t,sites,qstate,freq,amp):
     nu = t*freq; mu = sqrt((2.0*amp*(1/freq))**2-1.0)      # Noise parameters
@@ -119,5 +112,4 @@ if __name__ == "__main__":  #this line is not necessary(good practice to use tho
     for t in range(1,101):
         v=walk_variance(t,psip,45,freq,amp)
         sigma_sq.append(v)
-
     plot_variance(sigma_sq)

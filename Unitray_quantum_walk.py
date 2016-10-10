@@ -6,7 +6,7 @@
 #               : coin_angle  - parameter of the SU(2) coin.
 #               : qubit_state - input coin state
 #               : z (1/2)     - plot with zeros/plot without zeros           
-#                                                                                        
+# Useful ref    : qutip - http://qutip.org/docs/3.1.0/guide/guide-basics.html                                                                                    
 ##########################################################################################
 
 from qutip import *
@@ -16,12 +16,15 @@ from math import *
 
 
 #Basis states
+#basis(d,n), creates a coloum vector with dimension d and n=0,1..d-1 representing the position where one appears.
+#Ex: basis(2,0): 2-d vector with '1' appearing in the 0th position [1,0]^Transpose
 ket0 = basis(2,0).unit( )                # |0>
 ket1 = basis(2,1).unit()                 # |1>
-psip = (basis(2,0)+basis(2,1)*1j).unit() # |0>+i|1>/sqrt(2)
+psip = (basis(2,0)+basis(2,1)*1j).unit() # |0>+i|1>/sqrt(2); unit() is used to normalize the state
 psim = (basis(2,0)-basis(2,1)*1j).unit() # |0>-i|1>/sqrt(2)
 
 #Coin transformation
+#qutip.Qobj is a ([[]]) is a way to create a matrix or an array in qutip
 def coin(coin_angle):
   C_hat = qutip.Qobj([[cos(radians(coin_angle)), sin(radians(coin_angle))],
                       [sin(radians(coin_angle)), -cos(radians(coin_angle))]])
@@ -32,10 +35,11 @@ def shift(t):
   sites = 2*t+1
   shift_l = qutip.Qobj(np.roll(np.eye(sites), 1, axis=0))  #left chairality. Roll function is a general way to realize shift operator matrix
   shift_r = qutip.Qobj(np.roll(np.eye(sites), -1, axis=0)) #right chairality
-  S_hat = tensor(ket0*ket0.dag(),shift_l) + tensor(ket1*ket1.dag(),shift_r) 
+  S_hat = tensor(ket0*ket0.dag(),shift_l) + tensor(ket1*ket1.dag(),shift_r) #Complete shift Operator form
   return S_hat
 
 #Walk operator: Evolution operator for DTQW
+#tensor is a function called from qutip
 def walk(t,coin_angle):
   sites = 2*t+1
   C_hat = coin(coin_angle) 
@@ -44,12 +48,13 @@ def walk(t,coin_angle):
   return W_hat
 
 #Quantum walk generator: outputs the evolved wave function after 't' steps.
+#ket2dm is a qutip function used to convert kets to density matrices 
 def qwalk_gen(t,qubit_state,coin_angle):
   sites=2*t+1
   Position_state = basis(sites,t)           
   Psi = ket2dm(tensor(qubit_state,Position_state)) # Initial state - \rho(0)  
   W_hat = walk(t,coin_angle)              
-  for i in range(t):          
+  for i in range(t):                               #Apply the walk operator 't' times.
     Psi = W_hat*Psi*W_hat.dag()
   return Psi
 

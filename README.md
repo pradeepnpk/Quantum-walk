@@ -1,6 +1,6 @@
 # Quantum-walk: Open quantum walk simulations in python
 
-Install Qutip and all other dependednt pacakages http://qutip.org/docs/3.1.0/installation.html
+Install Qutip and all other dependencies pacakages http://qutip.org/docs/3.1.0/installation.html
 
 Packages nedded: 
 

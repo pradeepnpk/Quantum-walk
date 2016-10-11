@@ -1,13 +1,16 @@
-#      UNITARY_QUANTUM_WALK: Simulates discrete time quantum walk on a 1-d lattice.      
-#                          : Probablity distribution plot                                                             
+# UNITARY_QUANTUM_WALK: Simulates discrete time quantum walk on a 1-d lattice.      
+#                     : Probablity distribution plot.                                                             
 #                                                                                        
 # Main Variables: t           - number of steps of quantum walk.                               
 #               : sites       - number of lattice positions available to the walker (2*t+1).   
 #               : coin_angle  - parameter of the SU(2) coin.
-#               : qubit_state - input coin state
-#               : z (1/2)     - plot with zeros/plot without zeros           
+#               : qubit_state - input coin state.
+#               : z (1/2)     - plot with zeros/plot without zeros.    
+#
+# Output        : Plot of probablity distribution of the walker after 't' steps.
+#
 # Useful ref    : qutip - http://qutip.org/docs/3.1.0/guide/guide-basics.html                                                                                    
-##########################################################################################
+##############################################################################################
 
 from qutip import *
 import numpy as np
@@ -35,7 +38,7 @@ def shift(t):
   sites = 2*t+1
   shift_l = qutip.Qobj(np.roll(np.eye(sites), 1, axis=0))  #left chairality. Roll function is a general way to realize shift operator matrix
   shift_r = qutip.Qobj(np.roll(np.eye(sites), -1, axis=0)) #right chairality
-  S_hat = tensor(ket0*ket0.dag(),shift_l) + tensor(ket1*ket1.dag(),shift_r) #Complete shift Operator form
+  S_hat = tensor(ket0*ket0.dag(),shift_l) + tensor(ket1*ket1.dag(),shift_r) #Complete shift Operator.
   return S_hat
 
 #Walk operator: Evolution operator for DTQW
@@ -44,19 +47,19 @@ def walk(t,coin_angle):
   sites = 2*t+1
   C_hat = coin(coin_angle) 
   S_hat = shift(t)     
-  W_hat = S_hat*(tensor(C_hat,qeye(sites))) #combine both coin and shift
+  W_hat = S_hat*(tensor(C_hat,qeye(sites))) #combine both coin and shift.
   return W_hat
 
 #Quantum walk generator: outputs the evolved wave function after 't' steps.
-#ket2dm is a qutip function used to convert kets to density matrices 
+#ket2dm is a qutip function used to convert kets to density matrices. 
 def qwalk_gen(t,qubit_state,coin_angle):
   sites=2*t+1
-  Position_state = basis(sites,t)           
-  Psi = ket2dm(tensor(qubit_state,Position_state)) # Initial state - \rho(0)  
+  Position_state = basis(sites,t)                  # Initialize the lattice with num of positions = 2*t+1.
+  Psi = ket2dm(tensor(qubit_state,Position_state)) # Initial Bipartite state \psi(0)=: coin \tensor position.
   W_hat = walk(t,coin_angle)              
   for i in range(t):                               #Apply the walk operator 't' times.
     Psi = W_hat*Psi*W_hat.dag()
-  return Psi
+  return Psi                                       #W^t*[\psi(0)] = \psi(t).
 
 #Projective measurement on the position basis states. 
 #The walker has a zero probablity at odd positions of the lattice. 
@@ -64,10 +67,10 @@ def qwalk_gen(t,qubit_state,coin_angle):
 def measurement(t,Psi,z):
   sites=2*t+1
   prob=[]
-  for i in range(0,sites,z):
-    M_p = basis(sites,i)*basis(sites,i).dag() #Outer product
-    Measure = tensor(qeye(2),M_p)             #Identity on coin M_p on position
-    p = abs((Psi*Measure).tr())               #Probablity
+  for i in range(0,sites,z):                  #This loop performs measurement at all 2*t+1 sites.
+    M_p = basis(sites,i)*basis(sites,i).dag() #Outer product.
+    Measure = tensor(qeye(2),M_p)             #Identity on coin M_p on position.
+    p = abs((Psi*Measure).tr())               #Probablity.
     prob.append(p)
   return prob
 
@@ -82,8 +85,8 @@ def plot_pdf(P_p):
     plt.show()
 
 
-# the main instance of the program
-if __name__ == "__main__":           # this line is not necessary (good practice to use though)
-  Psi_t = qwalk_gen(100,psip,45)     # call the qwalk genrator
+# The main instance of the program
+if __name__ == "__main__":           # this line is not necessary (good practice to use though).
+  Psi_t = qwalk_gen(100,psip,45)     # call the qwalk generator.
   P_p  = measurement(100,Psi_t,2)    # measure the wave function returned by qwalk generator.
   plot_pdf(P_p)                      # here z=2 in the measurement func implies the measurements are made only at even positions 
